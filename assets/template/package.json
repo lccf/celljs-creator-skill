@@ -1,0 +1,23 @@
+{
+  "name": "<project-name>",
+  "keywords": [
+    "cell-component"
+  ],
+  "version": "0.0.1",
+  "license": "MIT",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "build": "cell build",
+    "start": "cell serve -m local"
+  },
+  "dependencies": {
+    "@celljs/core": "<celljs-version>",
+  },
+  "devDependencies": {
+    "@celljs/cli": "<celljs-version>",
+    "@celljs/cli-service": "<celljs-version>",
+  }
+}
