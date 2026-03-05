@@ -2,8 +2,8 @@
 
 添加数据库支持分为以下几个步骤
 
-1. 确定数据库类型 mysql 或 sqlite
-2. 安装依赖 @celljs/typeorm，如果是数据类型是 sqlite 还需要安装 sqlite3 依赖
+1. 确定数据库类型 mysql、sqlite、postgres
+2. 安装依赖 @celljs/typeorm，如果是数据类型是 sqlite 安装 sqlite3 依赖，postgres 需要安装 pg 依赖
 3. 在 cell-local.yml 中添加数据库配置
   - 如果是 mysql 则配置如下：
 ```yaml
@@ -14,7 +14,7 @@ backend:
         - type: mysql
           host: localhost
           port: 3306
-          username: root
+          username: <user>
           password: <PASSWORD>
           database: celljs
           synchronize: true
@@ -28,6 +28,21 @@ backend:
       ormConfig:
         - type: sqlite
           database: ./db/celljs.db
+          synchronize: true
+          logging: true
+```
+  - 如果是 postgres 则配置如下：
+```yaml
+backend:
+  cell:
+    typeorm:
+      ormConfig:
+        - type: postgres
+          host: localhost
+          port: 5432
+          username: <user>
+          password: <PASSWORD>
+          database: celljs
           synchronize: true
           logging: true
 ```
