@@ -15,7 +15,7 @@ backend:
           host: localhost
           port: 3306
           username: <user>
-          password: <PASSWORD>
+          password: <password>
           database: celljs
           synchronize: true
           logging: true
@@ -41,7 +41,7 @@ backend:
           host: localhost
           port: 5432
           username: <user>
-          password: <PASSWORD>
+          password: <password>
           database: celljs
           synchronize: true
           logging: true
