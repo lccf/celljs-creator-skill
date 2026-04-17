@@ -309,30 +309,6 @@ export class PasswordEncoderImpl implements PasswordEncoder {
 
 默认 [password-encoder](https://github.com/cellbang/cell/blob/main/packages/security/src/node/crypto/password/password-encoder.ts) 实现
 
-创建`src/node/authentication/authentication-success-handler.ts`文件登录成功时返回 token ，内容如下：
-
-```typescript
-import { Component, Autowired } from "@celljs/core";
-import { Context } from "@celljs/web/lib/node";
-import { AuthenticationSuccessHandler, Authentication } from "@celljs/security/lib/node";
-import { JwtService } from "@celljs/jwt";
-import { jsonFormat } from "../utils";
-
-@Component({ id: AuthenticationSuccessHandler, rebind: true })
-export class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
-    @Autowired(JwtService)
-    jwtService: JwtService;
-
-    async onAuthenticationSuccess(authentication: Authentication): Promise<void> {
-        const response = Context.getResponse();
-        let token = await this.jwtService.sign({ username: authentication.name });
-        response.body = JSON.stringify(jsonFormat({ token }));
-    }
-}
-```
-
-默认 [authentication-success-handler](https://github.com/cellbang/cell/blob/main/packages/security/src/node/authentication/authentication-success-handler.ts) 实现
-
 创建`src/node/authentication/security-context-store.ts`处理 header 带 Token 的请求，内容如下：
 
 ```typescript
@@ -361,7 +337,8 @@ export class SecurityContextStoreImpl implements SecurityContextStore {
 
     async load(): Promise<any> {
         const request = Context.getRequest();
-        const token = (request.get("Token") || "").trim()
+        const authHeader = request.get("Authorization");
+        const token = (authHeader.slice(7) || "").trim();
         const securityContext = await this.securityContextStrategy.create();
         if (token) {
             const userInfo: any = await this.jwtService.verify(token);
@@ -385,6 +362,30 @@ export class SecurityContextStoreImpl implements SecurityContextStore {
     }
 }
 ```
+
+创建`src/node/authentication/authentication-success-handler.ts`文件登录成功时返回 token ，内容如下：
+
+```typescript
+import { Component, Autowired } from "@celljs/core";
+import { Context } from "@celljs/web/lib/node";
+import { AuthenticationSuccessHandler, Authentication } from "@celljs/security/lib/node";
+import { JwtService } from "@celljs/jwt";
+import { jsonFormat } from "../utils";
+
+@Component({ id: AuthenticationSuccessHandler, rebind: true })
+export class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
+    @Autowired(JwtService)
+    jwtService: JwtService;
+
+    async onAuthenticationSuccess(authentication: Authentication): Promise<void> {
+        const response = Context.getResponse();
+        let token = await this.jwtService.sign({ username: authentication.name });
+        response.body = JSON.stringify(jsonFormat({ token }));
+    }
+}
+```
+
+默认 [authentication-success-handler](https://github.com/cellbang/cell/blob/main/packages/security/src/node/authentication/authentication-success-handler.ts) 实现
 
 创建 `src/node/authentication/error-handler.ts` 添加认证错误处理，内容如下：
 
@@ -431,8 +432,8 @@ export class AuthenticationErrorHandler implements ErrorHandler {
 ```ts
 export * from "./password-encoder";
 export * from "./user-checker";
-export * from "./authentication-success-handler";
 export * from "./security-context-store";
+export * from "./authentication-success-handler";
 export * from "./error-handler";
 ```
 
@@ -453,3 +454,7 @@ export default autoBind();
 6. 给控制器添加认证
 
 从 @celljs/security/lib/node 导入 Authenticated 修饰器，给需要认证的方法添加修饰
+
+7. 获取当前用户信息
+
+从 @celljs/security/lib/node 导入 SecurityContext 调用 SecurityContext.getAuthentication() 获取当前用户信息
