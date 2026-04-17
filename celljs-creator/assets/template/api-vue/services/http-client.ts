@@ -26,4 +26,14 @@ export class HttpClient {
         return this.client.post<T>(url, params)
             .then(res => res.data);
     }
+
+    put<T = any>(url: string, params = {}) {
+        return this.client.put<T>(url, params)
+            .then(res => res.data);
+    }
+
+    delete<T = any>(url: string, params = {}) {
+        return this.client.delete<T>(url, { params })
+            .then(res => res.data);
+    }
 }
