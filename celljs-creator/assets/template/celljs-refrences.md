@@ -211,10 +211,10 @@ export const jsonFormat = <T>(data: T, error: any = null) : ResponseData<T> => {
 
 ```ts
 import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, CreateDateColumn,
-    UpdateDateColumn, Unique } from "typeorm";
+    UpdateDateColumn, Unique } from 'typeorm';
 
-@Entity({ name: "users" })
-@Unique(["username"])
+@Entity({ name: 'users' })
+@Unique(['username'])
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
@@ -228,10 +228,10 @@ export class User extends BaseEntity {
     @Column()
     desc: string;
 
-    @CreateDateColumn({ name: "created_at" })
+    @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 
-    @UpdateDateColumn({ name: "updated_at" })
+    @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
 }
 ```
@@ -337,8 +337,8 @@ export class SecurityContextStoreImpl implements SecurityContextStore {
 
     async load(): Promise<any> {
         const request = Context.getRequest();
-        const authHeader = request.get("Authorization");
-        const token = (authHeader.slice(7) || "").trim();
+        const authHeader = request.get('Authorization');
+        const token = (authHeader.slice(7) || '').trim();
         const securityContext = await this.securityContextStrategy.create();
         if (token) {
             const userInfo: any = await this.jwtService.verify(token);
@@ -348,7 +348,7 @@ export class SecurityContextStoreImpl implements SecurityContextStore {
                 securityContext.authentication = {
                     name: user.username,
                     principal: user,
-                    credentials: "",
+                    credentials: '',
                     policies: user.policies,
                     authenticated: true
                 };
