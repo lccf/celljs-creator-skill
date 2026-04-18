@@ -1,5 +1,11 @@
 # celljs creator skill
 
+安装
+
+```bash
+npx skills add lccf/celljs-creator-skill --skill celljs-creator
+```
+
 用于创建 celljs 项目，示例：
 
 ```md
@@ -14,6 +20,12 @@
 参考链接：[celljs](https://github.com/cellbang/cell)
 
 ## English Usage
+
+Install:
+
+```bash
+npx skills add lccf/celljs-creator-skill --skill celljs-creator
+```
 
 Used for creating celljs projects, example:
 
